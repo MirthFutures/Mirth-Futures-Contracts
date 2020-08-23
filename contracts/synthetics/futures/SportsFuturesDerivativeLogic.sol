@@ -1,10 +1,10 @@
 pragma solidity 0.5.16;
 pragma experimental ABIEncoderV2;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/SafeMath.sol";
-import "https://github.com/aragon/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/ownership/Ownable.sol";
 
-import "https://github.com/OpiumProtocol/opium-contracts/blob/master/contracts/Interface/IDerivativeLogic.sol";
+import "opium-contracts/contracts/Interface/IDerivativeLogic.sol";
 
 contract SportsFuturesDerivativeLogic is IDerivativeLogic, Ownable {
   using SafeMath for uint256;
@@ -45,18 +45,15 @@ contract SportsFuturesDerivativeLogic is IDerivativeLogic, Ownable {
   }
 
   function getExecutionPayout(Derivative memory _derivative, uint256 _winner) public view returns (uint256 buyerPayout, uint256 sellerPayout) {
-    uint256 _derivative.margin;
     uint256 team = _derivative.params[0];
    // Validates winning team is derivative team returned by oracle
     if (team != _winner) {
         buyerPayout = 0;
         sellerPayout = _derivative.margin;
-      }
-    //Pays out if derivative team is winning team
-    else (team = _winner) {
+    } else { //Pays out if derivative team is winning team
       buyerPayout = _derivative.margin;
       sellerPayout = 0;
-      }
+    }
 }
   /** COMMISSION */
   /// @notice Getter for syntheticId author address

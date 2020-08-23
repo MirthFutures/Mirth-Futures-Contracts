@@ -1,11 +1,11 @@
 pragma solidity 0.5.16;
 
-import "https://github.com/smartcontractkit/chainlink/blob/master/evm-contracts/src/v0.6/interfaces/AggregatorInterface.sol";
+import "@chainlink/contracts/src/v0.5/dev/AggregatorInterface.sol";
 
-import "https://github.com/aragon/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-import "https://github.com/OpiumProtocol/opium-contracts/blob/master/contracts/Interface/IOracleId.sol";
-import "https://github.com/OpiumProtocol/opium-contracts/blob/master/contracts/OracleAggregator.sol";
+import "opium-contracts/contracts/Interface/IOracleId.sol";
+import "opium-contracts/contracts/OracleAggregator.sol";
 
 contract MLBChainlinkOracleId is IOracleId, Ownable {
   using SafeMath for uint256;
