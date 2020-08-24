@@ -1,17 +1,17 @@
 pragma solidity 0.5.16;
 
 import "@chainlink/contracts/src/v0.5/dev/AggregatorInterface.sol";
-
+import "@chainlink/contracts/src/v0.5/ChainlinkClient.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 import "opium-contracts/contracts/Interface/IOracleId.sol";
 import "opium-contracts/contracts/OracleAggregator.sol";
 
-contract MLBChainlinkOracleId is IOracleId, Ownable {
+contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   using SafeMath for uint256;
 
   event Requested(bytes32 indexed queryId, uint256 indexed timestamp);
-  event Provided(bytes32 indexed queryId, uint256 indexed timestamp, bool result);
+  event Provided(bytes32 indexed queryId, uint256 indexed timestamp, uint256 result);
 
   mapping (bytes32 => uint256) public pendingQueries;
 
@@ -20,7 +20,10 @@ contract MLBChainlinkOracleId is IOracleId, Ownable {
 
   // Chainlink
   AggregatorInterface internal ref;
-  unit256 public _winner;
+  uint256 public winner;
+  address public oracle;
+  bytes32 public jobId;
+  uint256 public fee;
 
   // Governance
   uint256 public EMERGENCY_PERIOD;
@@ -29,7 +32,7 @@ contract MLBChainlinkOracleId is IOracleId, Ownable {
     ref = _chainlinkAggregator;
     oracleAggregator = _oracleAggregator;
 
-    _winner = 0;
+    winner = 0;
 
     setPublicChainlinkToken();
     oracle = 0x7AFe1118Ea78C1eae84ca8feE5C65Bc76CcF879e;
@@ -84,7 +87,7 @@ contract MLBChainlinkOracleId is IOracleId, Ownable {
       "Only when no data and after timestamp allowed"
     );
 
-    uint256 result = getReversedLatestPrice();
+    uint256 result = winner;
     oracleAggregator.__callback(timestamp, result);
 
     emit Provided(_queryId, timestamp, result);
@@ -103,7 +106,7 @@ contract MLBChainlinkOracleId is IOracleId, Ownable {
           return sendChainlinkRequestTo(oracle, request, fee);
       }
 
-  function fulfill(bytes32 _requestId, uint256 _result) public recordChainlinkFulfillment(_requestId)
+  function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
   {
       winner = _winner;
     }
@@ -111,20 +114,20 @@ contract MLBChainlinkOracleId is IOracleId, Ownable {
   /**
     Emergency callback allows to push data manually in case EMERGENCY_PERIOD elapsed and no data were provided
    */
-  function emergencyCallback(bytes32 _queryId, bool _result) public onlyOwner {
-    uint256 timestamp = pendingQueries[_queryId];
-    require(
-      !oracleAggregator.hasData(address(this), timestamp) &&
-      timestamp + EMERGENCY_PERIOD  < now,
-      "Only when no data and after emergency period allowed"
-    );
+   function emergencyCallback(bytes32 _queryId, uint256 _result) public onlyOwner {
+     uint256 timestamp = pendingQueries[_queryId];
+     require(
+       !oracleAggregator.hasData(address(this), timestamp) &&
+       timestamp + EMERGENCY_PERIOD  < now,
+       "Only when no data and after emergency period allowed"
+     );
 
-    oracleAggregator.__callback(timestamp, _result);
+     oracleAggregator.__callback(timestamp, _result);
 
-    emit Provided(_queryId, timestamp, _result);
-  }
+     emit Provided(_queryId, timestamp, _result);
+   }
 
-  function setEmergencyPeriod(uint256 _emergencyPeriod) public onlyOwner {
-    EMERGENCY_PERIOD = _emergencyPeriod;
-  }
+   function setEmergencyPeriod(uint256 _emergencyPeriod) public onlyOwner {
+     EMERGENCY_PERIOD = _emergencyPeriod;
+   }
 }
