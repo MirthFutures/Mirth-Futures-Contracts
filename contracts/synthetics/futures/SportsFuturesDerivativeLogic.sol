@@ -11,7 +11,7 @@ contract SportsFuturesDerivativeLogic is IDerivativeLogic, Ownable {
 
   address private author;
   uint256 private commission;
-  unit256 public team;
+
 
   constructor() public {
     /*
@@ -44,10 +44,10 @@ contract SportsFuturesDerivativeLogic is IDerivativeLogic, Ownable {
     sellerMargin = _derivative.margin;
   }
 
-  function getExecutionPayout(Derivative memory _derivative, uint256 _winner) public view returns (uint256 buyerPayout, uint256 sellerPayout) {
+  function getExecutionPayout(Derivative memory _derivative, uint256 _result) public view returns (uint256 buyerPayout, uint256 sellerPayout) {
     uint256 team = _derivative.params[0];
    // Validates winning team is derivative team returned by oracle
-    if (team != _winner) {
+    if (team != _result) {
         buyerPayout = 0;
         sellerPayout = _derivative.margin;
     } else { //Pays out if derivative team is winning team
