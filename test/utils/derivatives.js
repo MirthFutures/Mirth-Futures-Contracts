@@ -1,6 +1,16 @@
 const { web3 } = require('@openzeppelin/test-environment')
 const { constants } = require('@openzeppelin/test-helpers')
 
+/**
+ * 
+ * @param {object} derivative 
+ * @param {string | number} derivative.margin
+ * @param {string | number} derivative.endTime
+ * @param {(string | number)[]} derivative.params
+ * @param {string} derivative.oracleId
+ * @param {string} derivative.token
+ * @param {string} derivative.syntheticId
+ */
 module.exports.derivativeFactory = (derivative) => {
   const def = {
     margin: 0,
