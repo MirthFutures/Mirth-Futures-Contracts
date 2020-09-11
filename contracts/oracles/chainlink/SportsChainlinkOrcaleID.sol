@@ -24,6 +24,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   address public oracle;
   bytes32 public jobId;
   uint256 public fee;
+  uint256 public team;
 
   // Governance
   uint256 public EMERGENCY_PERIOD;
@@ -31,7 +32,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   constructor(AggregatorInterface _chainlinkAggregator, OracleAggregator _oracleAggregator, uint256 _emergencyPeriod) public {
     ref = _chainlinkAggregator;
     oracleAggregator = _oracleAggregator;
-
+    team = 0;
     winner = 0;
 
     setPublicChainlinkToken();
