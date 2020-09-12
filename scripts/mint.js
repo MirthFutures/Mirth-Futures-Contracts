@@ -4,7 +4,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider')
 const CORE_ABI = require('./abis/Core.json')
 const ERC20_ABI = require('./abis/ERC20.json')
 
-const { derivativeFactory } = require('../test/utils/derivatives')
+const { derivativeFactory } = require('./utils/derivatives')
 
 // Constants
 const PUBLIC_KEY = ''
@@ -49,12 +49,12 @@ const quantity = 5
 const start = async () => {
   console.log('Approving Opium.TokenSpender to spend Margin token...')
   // Approve Opium.TokenSpender to spend Margin token (e.g. DAI) infinite amount of tokens
-  await marginToken.methods.approve(OPIUM_TOKEN_SPENDER_ADDRESS, 1000)
+  await marginToken.methods.approve(OPIUM_TOKEN_SPENDER_ADDRESS, -1).send({ from: PUBLIC_KEY })
   console.log('Approved')
 
   // Mint derivative
   console.log(`Minting ${quantity} derivatives...`)
-  await opiumCore.methods.create(derivative, quantity, [ PUBLIC_KEY, PUBLIC_KEY ])
+  await opiumCore.methods.create(derivative, quantity, [ PUBLIC_KEY, PUBLIC_KEY ]).send({ from: PUBLIC_KEY })
   console.log('Minted')
 }
 start()
