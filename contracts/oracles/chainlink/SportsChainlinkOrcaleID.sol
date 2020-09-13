@@ -28,7 +28,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   uint256 public EMERGENCY_PERIOD;
 
   constructor(OracleAggregator _oracleAggregator, uint256 _emergencyPeriod) public {
-    oracleAggregator;
+    oracleAggregator = _oracleAggregator;
     winner = 0;
 
 
