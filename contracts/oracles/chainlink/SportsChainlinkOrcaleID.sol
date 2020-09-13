@@ -1,6 +1,5 @@
 pragma solidity 0.5.16;
 
-import "@chainlink/contracts/src/v0.5/dev/AggregatorInterface.sol";
 import "@chainlink/contracts/src/v0.5/ChainlinkClient.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
@@ -19,25 +18,24 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   OracleAggregator public oracleAggregator;
 
   // Chainlink
-  AggregatorInterface internal ref;
   uint256 public winner;
   address public oracle;
   bytes32 public jobId;
   uint256 public fee;
-  uint256 public team;
+
 
   // Governance
   uint256 public EMERGENCY_PERIOD;
 
-  constructor(AggregatorInterface _chainlinkAggregator, OracleAggregator _oracleAggregator, uint256 _emergencyPeriod) public {
-    ref = _chainlinkAggregator;
-    oracleAggregator = _oracleAggregator;
-    team = 0;
+  constructor(OracleAggregator _oracleAggregator, uint256 _emergencyPeriod) public {
+    oracleAggregator;
     winner = 0;
 
+
+
     setPublicChainlinkToken();
-    oracle = 0x7AFe1118Ea78C1eae84ca8feE5C65Bc76CcF879e;
-    jobId = "6d1bfe27e7034b1d87b5270556b17277";
+    oracle = 0xB36d3709e22F7c708348E225b20b13eA546E6D9c;
+    jobId = "a880cb0cb8964be5ae8fdcecc50aa53f";
     fee = 0.1 * 10 ** 18; // 0.1 LINK
 
 
@@ -74,11 +72,10 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
       pendingQueries[queryId] = moment;
       emit Requested(queryId, moment);
     }
-  }
-
-  function calculateFetchPrice() external returns (uint256) {
-    return 0;
-  }
+}
+    function calculateFetchPrice() external returns (uint256) {
+      return 0;
+    }
 
   function _callback(bytes32 _queryId) public {
     uint256 timestamp = pendingQueries[_queryId];
@@ -131,4 +128,5 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
    function setEmergencyPeriod(uint256 _emergencyPeriod) public onlyOwner {
      EMERGENCY_PERIOD = _emergencyPeriod;
    }
+
 }
