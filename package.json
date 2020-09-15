@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm run compile && mocha --exit --recursive --timeout 15000",
     "compile": "npx oz compile --solc-version=0.5.16 --optimizer on",
-    "mint": "node ./scripts/mint.js"
+    "mint": "node ./scripts/mint.js",
+    "execute": "node ./scripts/execute.js"
   },
   "author": "",
   "license": "ISC",
