@@ -35,7 +35,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
     setPublicChainlinkToken();
     oracle = 0xB36d3709e22F7c708348E225b20b13eA546E6D9c;
     jobId = "a880cb0cb8964be5ae8fdcecc50aa53f";
-    fee = 0 * 10 ** 18; // 0.1 LINK
+    fee = 0.1 * 10 ** 18; // 0.1 LINK
 
 
     EMERGENCY_PERIOD = _emergencyPeriod;
