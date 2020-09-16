@@ -11,6 +11,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
 
   event Requested(bytes32 indexed queryId, uint256 indexed timestamp);
   event Provided(bytes32 indexed queryId, uint256 indexed timestamp, uint256 result);
+  event requestWinnerFulfilled(bytes32 indexed requestId, uint256 indexed winner);
 
   mapping (bytes32 => uint256) public pendingQueries;
 
@@ -29,9 +30,6 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
 
   constructor(OracleAggregator _oracleAggregator, uint256 _emergencyPeriod) public {
     oracleAggregator = _oracleAggregator;
-    winner = 0;
-
-
 
     setPublicChainlinkToken();
     oracle = 0xB36d3709e22F7c708348E225b20b13eA546E6D9c;
@@ -106,7 +104,20 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
 
   function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
   {
+      emit requestWinnerFulfilled(_requestId, _winner);
       winner = _winner;
+    }
+
+  function withdrawLink() public onlyOwner {
+  		LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+  		require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
+  	}
+
+    function stringToBytes32(string memory source) private pure returns (bytes32 result) {
+  		bytes memory tempEmptyStringTest = bytes(source);
+  		if (tempEmptyStringTest.length == 0) {
+  	  		return 0x0;
+  		}
     }
   /** GOVERNANCE */
   /**
