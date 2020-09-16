@@ -25,6 +25,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   uint256 public fee;
 
 
+
   // Governance
   uint256 public EMERGENCY_PERIOD;
 
@@ -34,7 +35,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
     setPublicChainlinkToken();
     oracle = 0xB36d3709e22F7c708348E225b20b13eA546E6D9c;
     jobId = "a880cb0cb8964be5ae8fdcecc50aa53f";
-    fee = 0.1 * 10 ** 18; // 0.1 LINK
+    fee = 0 * 10 ** 18; // 0.1 LINK
 
 
     EMERGENCY_PERIOD = _emergencyPeriod;
@@ -83,7 +84,8 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
       "Only when no data and after timestamp allowed"
     );
 
-    uint256 result = winner;
+    uint256 result = getLatestWinner();
+
     oracleAggregator.__callback(timestamp, result);
 
     emit Provided(_queryId, timestamp, result);
@@ -102,23 +104,16 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
           return sendChainlinkRequestTo(oracle, request, fee);
       }
 
-  function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
-  {
+      function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
+      {
       emit requestWinnerFulfilled(_requestId, _winner);
       winner = _winner;
-    }
+      }
 
-  function withdrawLink() public onlyOwner {
-  		LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
-  		require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
-  	}
-
-    function stringToBytes32(string memory source) private pure returns (bytes32 result) {
-  		bytes memory tempEmptyStringTest = bytes(source);
-  		if (tempEmptyStringTest.length == 0) {
-  	  		return 0x0;
-  		}
-    }
+      function getLatestWinner() public view returns (uint256) {
+      uint256 team = uint256(winner);
+      return (team);
+      }
   /** GOVERNANCE */
   /**
     Emergency callback allows to push data manually in case EMERGENCY_PERIOD elapsed and no data were provided
