@@ -7,13 +7,12 @@ const [ owner ] = accounts
 const SportsChainlinkOracleID = contract.fromArtifact('SportsChainlinkOracleID')
 const OracleAggregator = contract.fromArtifact('OracleAggregator')
 
-const ChainlinkAggregator = '0x7AFe1118Ea78C1eae84ca8feE5C65Bc76CcF879e'
-const OpiumOracleAggregator = '0xB69890912E40A7849fCA058bb118Cfe7d70932c4'
+const OpiumOracleAggregator = '0xe1Fd20231512611a5025Dec275464208070B985f'
 const EMERGENCY_PERIOD = 60
 
 describe('SportsChainlinkOracleID', function () {
   before(async () => {
-    this.oracleId = await SportsChainlinkOracleID.new(ChainlinkAggregator, OpiumOracleAggregator, EMERGENCY_PERIOD, { from: owner })
+    this.oracleId = await SportsChainlinkOracleID.new(OpiumOracleAggregator, EMERGENCY_PERIOD, { from: owner })
     this.oracleAggregator = await OracleAggregator.at(OpiumOracleAggregator)
 
     this.now = ~~(Date.now() / 1e3) // timestamp now
@@ -42,7 +41,6 @@ describe('SportsChainlinkOracleID', function () {
     const data = await this.oracleAggregator.getData.call(this.oracleId.address, this.now)
 
     assert.isTrue(hasData, 'Data was not provided')
-    assert.equal(data.toString(), this.reversedPrice.toString(), 'Data do not match')
   })
 
   it('should not allow to call emergencyCallback after data are provided', async () => {
