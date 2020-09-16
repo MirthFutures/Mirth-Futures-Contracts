@@ -13,10 +13,10 @@ const PROVIDER = ''
 const OPIUM_CORE_ADDRESS = '0xE995d8E9E0a01c938e6ae5B05720Af245953dC57'
 const OPIUM_TOKEN_SPENDER_ADDRESS = '0xE39b9D5dC766102181D4C5Cd7df1691565B52032'
 const MARGIN_TOKEN_ADDRESS = '0x0558dc82f203C8c5f5b9033061aa5AdefFC40AF7'
-const tokenIds = ['73981377331712443496464688835913523576399119371292695783222430341724877019177', '71672154408559061657332570778143546654354803393112564850635294784036740919300']
+const tokenIds = ['', '']
 
-const ORACLE_ID_ADDRESS = '0x9712b6aff7d2dB96097565EB8b2183b75e839130'
-const SYNTHETIC_ID_ADDRESS = '0xc34b9c9DBB39Be0Ef850170127A7b4283484f804'
+const ORACLE_ID_ADDRESS = ''
+const SYNTHETIC_ID_ADDRESS = ''
 
 // Create instance of web3
 const web3 = new Web3(new HDWalletProvider(SEED_PHRASE, PROVIDER))
@@ -30,7 +30,7 @@ const marginToken = new web3.eth.Contract(ERC20_ABI, MARGIN_TOKEN_ADDRESS)
 // Using web3.utils.toWei() function to convert number to BigInt with 18 decimals, standard for DAI, won't work for USDC
 const margin = web3.utils.toWei('10') // 10 DAI ~ 10e18
 
-const endTime = ~~(Date.now() / 1000) + 10 * 60// 10 minutes from now
+const endTime = Date.UTC(2020, 8, 16, 3, 40, 0)
 
 const params = [ 15 ] // Params: [ Team Number ]
 
@@ -46,9 +46,9 @@ const derivative = derivativeFactory({
 const quantity = 10
 
 // Start script
-  // Mint derivative
 const start = async () => {
 
+//execute derivative
   console.log(`Executing ${quantity} derivatives...`)
   await opiumCore.methods.execute(tokenIds, [quantity, quantity], [derivative, derivative]).send({ from: PUBLIC_KEY, gas: 8000000 })
   console.log('Executed')
