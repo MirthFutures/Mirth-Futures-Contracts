@@ -49,9 +49,9 @@ contract SportsFuturesDerivativeLogic is IDerivativeLogic, Ownable {
    // Validates winning team is derivative team returned by oracle
     if (team != _result) {
         buyerPayout = 0;
-        sellerPayout = _derivative.margin;
+        sellerPayout = 2 * _derivative.margin;
     } else { //Pays out if derivative team is winning team
-      buyerPayout = _derivative.margin;
+      buyerPayout = 2 * _derivative.margin;
       sellerPayout = 0;
     }
 }
