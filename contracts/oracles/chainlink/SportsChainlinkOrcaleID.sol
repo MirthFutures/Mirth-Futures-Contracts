@@ -23,7 +23,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
   address public oracle;
   bytes32 public jobId;
   uint256 public fee;
-
+  uint256 public team;
 
 
   // Governance
@@ -84,7 +84,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
       "Only when no data and after timestamp allowed"
     );
 
-    uint256 result = getLatestWinner();
+    uint256 result = getResult();
 
     oracleAggregator.__callback(timestamp, result);
 
@@ -104,16 +104,17 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
           return sendChainlinkRequestTo(oracle, request, fee);
       }
 
-      function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
+    function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
       {
       emit requestWinnerFulfilled(_requestId, _winner);
       winner = _winner;
       }
 
-      function getLatestWinner() public view returns (uint256) {
-      uint256 team = uint256(winner);
-      return (team);
-      }
+    function getResult() public returns (uint256) {
+     winner = uint256(team);
+     return (team);
+   }
+
   /** GOVERNANCE */
   /**
     Emergency callback allows to push data manually in case EMERGENCY_PERIOD elapsed and no data were provided
