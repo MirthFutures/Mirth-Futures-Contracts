@@ -33,8 +33,7 @@ describe('FutureSyntheticId', function () {
         margin: 2000,
         endTime: ~~(Date.now() / 1000) + 60, // + 1 min
         params: [
-          0, // team ID
-          this.sensitivity
+          0 // team ID
         ]
       })
 
@@ -72,6 +71,7 @@ describe('FutureSyntheticId', function () {
 
   context('getMargin', () => {
     it('should correctly return necessary margin', async () => {
+      const currentPrice = 15
       const derivative = derivativeFactory({
         margin: 2000,
         endTime: ~~(Date.now() / 1000) + 60, // + 1 min
