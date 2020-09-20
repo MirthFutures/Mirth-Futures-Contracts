@@ -7,7 +7,10 @@
     "test": "npm run compile && mocha --exit --recursive --timeout 15000",
     "compile": "npx oz compile --solc-version=0.5.16 --optimizer on",
     "mint": "node ./scripts/mint.js",
-    "execute": "node ./scripts/execute.js"
+    "execute": "node ./scripts/execute.js",
+    "oracle": "node ./scripts/oracle.js",
+    "sendoa": "node ./scripts/sendoa.js",
+    "fetch": "node ./scripts/fetch.js"
   },
   "author": "",
   "license": "ISC",
