@@ -11,7 +11,6 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
 
   event Requested(bytes32 indexed queryId, uint256 indexed timestamp);
   event Provided(bytes32 indexed queryId, uint256 indexed timestamp, uint256 result);
-  event requestWinnerFulfilled(bytes32 indexed requestId, uint256 indexed winner);
 
   mapping (bytes32 => uint256) public pendingQueries;
 
@@ -36,6 +35,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
     oracle = 0x7AFe1118Ea78C1eae84ca8feE5C65Bc76CcF879e;
     jobId = "6d1bfe27e7034b1d87b5270556b17277";
     fee = 1 * 10 ** 18; // 0.1 LINK
+    winner = 0;
 
 
     EMERGENCY_PERIOD = _emergencyPeriod;
@@ -84,7 +84,7 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
       "Only when no data and after timestamp allowed"
     );
 
-    uint256 result = getResult();
+    uint256 result = winner;
 
     oracleAggregator.__callback(timestamp, result);
 
@@ -106,14 +106,11 @@ contract SportsChainlinkOracleId is ChainlinkClient, IOracleId, Ownable {
 
     function fulfill(bytes32 _requestId, uint256 _winner) public recordChainlinkFulfillment(_requestId)
       {
-      emit requestWinnerFulfilled(_requestId, _winner);
       winner = _winner;
       }
 
-    function getResult() public returns (uint256) {
-     winner = uint256(team);
-     return (team);
-   }
+
+
 
   /** GOVERNANCE */
   /**
